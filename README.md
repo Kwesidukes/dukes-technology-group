@@ -6,33 +6,52 @@ Microsoft 365/security governance, data & analytics, and project advisory.
 
 This is a static site (no build step, no backend, no database) with a
 black-and-gold brand identity. It is designed to be served as-is by any
-static host.
-
-## Live status
-
-This is a **pre-launch preview**. The contact form does not send or store
-any data — see [Pre-launch checklist](#pre-launch-checklist) below.
+static host, and is configured for production deployment on Vercel at
+`dukestg.com.au`.
 
 ## File structure
 
 ```
 .
-├── index.html        # Home page — hero, services, approach, about, contact
-├── privacy.html       # Draft privacy policy
-├── terms.html          # Draft website terms of use
-├── style.css            # Full responsive visual system (single stylesheet)
-├── script.js              # Mobile nav toggle, footer year, preview-only contact form
+├── index.html                    # Home
+├── services.html                 # Services
+├── approach.html                 # Approach
+├── sigma-technology.html         # Sigma Technology
+├── about.html                    # About / founder
+├── contact.html                  # Contact details and enquiry addresses
+├── privacy.html                  # Privacy Policy
+├── terms.html                    # Website Terms of Use
+├── style.css                     # Full responsive visual system (single stylesheet)
+├── script.js                     # Mobile nav toggle, footer year
+├── favicon.ico                   # Rounded gold DTG crown — shortcut icon
+├── apple-touch-icon.png          # Rounded gold DTG crown — iOS/Safari icon (180x180)
+├── site.webmanifest              # Web-app manifest (PWA icon set)
 ├── assets/
-│   ├── favicon.png            # Browser tab icon
-│   ├── dtg-avatar.png          # Circular crown monogram (header/footer/about)
-│   ├── dtg-hero-logo.png        # Gold wordmark/logo used in the hero section
-│   └── dtg-letterhead.png        # Letterhead-style brand asset
+│   ├── favicon-32.png            # Rounded gold DTG crown — 32x32 tab icon
+│   ├── favicon-64.png            # Rounded gold DTG crown — 64x64 tab icon
+│   ├── dtg-avatar.png            # Circular crown monogram (header/footer)
+│   ├── dtg-hero-logo.png         # Gold wordmark/logo used in the hero section
+│   ├── dtg-letterhead.png        # Letterhead-style brand asset
+│   ├── dtg-sigma-brand.png       # Sigma Technology brand asset
+│   └── kwesi-dtg-polo.png        # About page portrait
+├── vercel.json                   # Pins framework to null — served as static files
 └── README.md
 ```
 
 All page links, image sources, and script/style references use paths
 relative to the site root, so the site works unmodified from a repo root,
-a static host root, or a subfolder deploy.
+a static host root, or a subfolder deploy. Favicon/manifest links use
+root-relative paths (`/favicon.ico`, `/assets/favicon-32.png`, etc.) with a
+`?v=3` cache-busting query string — bump that version number on any future
+icon change to force browsers to fetch the new file.
+
+## Business details
+
+- Dukes Technology Group Pty Ltd
+- ABN 61 702 524 310 · ACN 702 524 310
+- Perth, Western Australia
+- Contact addresses: `hello@`, `accounts@`, `support@`, `security@`,
+  `legal@`, `privacy@dukestg.com.au`
 
 ## Local preview
 
@@ -46,50 +65,32 @@ python3 -m http.server 8080
 
 or open `index.html` directly in a browser.
 
-## Deployment
-
-### Vercel (recommended — already connected to GitHub)
+## Deployment (Vercel)
 
 1. In the [Vercel dashboard](https://vercel.com/dashboard), click **Add New… → Project**.
 2. Import the `Kwesidukes/dukes-technology-group` repository.
-3. Framework Preset: choose **Other** (this is a plain static site — no
-   build command, no output directory needed; `vercel.json` in this repo
-   already pins the framework to `null` so Vercel serves the root files
-   directly).
-4. Leave **Build Command** and **Install Command** empty, and **Output
-   Directory** as the project root.
-5. Click **Deploy**. Vercel will assign a `*.vercel.app` preview URL
-   immediately; a production domain can be attached later under
-   **Settings → Domains**.
-6. Every future push to the branch connected as Production (typically
-   `main`) will auto-deploy; other branches get their own preview URLs.
-
-### Alternative static hosts
-
-The site is portable to GitHub Pages, Netlify, or Cloudflare Pages with no
-changes — just point the host at the repository root with no build step.
-
-## Pre-launch checklist
-
-Business details are intentionally left as **pending** until finalised:
-
-- [ ] Register the ABN and replace `ABN: pending registration` in
-      `index.html` with the issued number.
-- [ ] Finalise the DTG business email address and wire up real contact-form
-      delivery (currently `script.js` only prepares an enquiry in the
-      browser and explicitly does **not** transmit or store form data).
-- [ ] Confirm and attach the production custom domain in Vercel
-      (**Settings → Domains**).
-- [ ] Legal review of `privacy.html` and `terms.html` — both are marked as
-      drafts pending business contact details.
-- [ ] Swap or confirm final brand assets in `assets/` if the logo/monogram
-      changes before launch.
-- [ ] Re-check all internal links, the mobile nav toggle, and both legal
-      pages on a deployed preview URL before flipping any custom domain to
-      production.
+3. Framework Preset: **Other** — this is a plain static site. No build
+   command, no install command, no output directory beyond the repo root;
+   `vercel.json` already pins `framework: null` so Vercel serves the root
+   files directly.
+4. Click **Deploy**. Vercel assigns a `*.vercel.app` preview URL
+   immediately.
+5. Verify the preview URL thoroughly (all pages, nav links, favicon,
+   contact links) **before** attaching the custom domain.
+6. Under **Settings → Domains**, add `dukestg.com.au` as the primary
+   production domain, and add `www.dukestg.com.au` configured to
+   redirect permanently to `https://dukestg.com.au`.
+7. Update DNS at the registrar (Crazy Domains) only after step 5 passes,
+   replacing only the web-hosting A/CNAME records with the exact values
+   Vercel's Domains page shows for this project. Leave MX, SPF, DKIM,
+   DMARC and all other email/verification records untouched.
+8. Keep the previous hosting deployment and DNS live until the Vercel
+   deployment is confirmed working over HTTPS on the custom domain.
 
 ## Branding
 
 Do not redesign the black-and-gold visual identity unless something is
 functionally broken. Visual changes should be deliberate, incremental
-updates to `style.css`, not a rebuild.
+updates to `style.css`, not a rebuild. Every page's favicon/apple-touch-icon/
+manifest must always point at the rounded gold DTG crown assets listed
+above — never a generic or placeholder icon.
